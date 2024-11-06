@@ -18,6 +18,8 @@
 - **clashRuleSet**：ipcidr 类型的 Clash RuleSet
 - **clashRuleSetClassical**：classical 类型的 Clash RuleSet
 - **cutter**：用于裁剪前置步骤中的数据
+- **dbipCountryMMDB**：DB-IP country mmdb 数据格式（`dbip-country-lite.mmdb`）
+- **ipinfoCountryMMDB**：IPInfo country mmdb 数据格式（`country.mmdb`）
 - **json**：JSON 数据格式
 - **maxmindGeoLite2ASNCSV**：MaxMind GeoLite2 ASN CSV 数据格式（`GeoLite2-ASN-CSV.zip`）
 - **maxmindGeoLite2CountryCSV**：MaxMind GeoLite2 country CSV 数据格式（`GeoLite2-Country-CSV.zip`）
@@ -34,8 +36,10 @@
 
 - **clashRuleSet**：ipcidr 类型的 Clash RuleSet
 - **clashRuleSetClassical**：classical 类型的 Clash RuleSet
+- **dbipCountryMMDB**：DB-IP country mmdb 数据格式（`dbip-country-lite.mmdb`）
+- **ipinfoCountryMMDB**：IPInfo country mmdb 数据格式（`country.mmdb`）
 - **lookup**：从指定的列表中查找指定的 IP 或 CIDR
-- **maxmindMMDB**：MaxMind mmdb 数据格式（`GeoLite2-Country.mmdb`）
+- **maxmindMMDB**：MaxMind GeoLite2 country mmdb 数据格式（`GeoLite2-Country.mmdb`）
 - **mihomoMRS**：mihomo MRS 数据格式（`geoip-cn.mrs`）
 - **singboxSRS**：sing-box SRS 数据格式（`geoip-cn.srs`）
 - **stdout**：将纯文本 CIDR 输出到 standard output（例如：`1.0.0.0/24`）
@@ -162,6 +166,110 @@
   "args": {
     "wantedList": ["cn", "us", "jp"],
     "onlyIPType": "ipv6"              // 只移除名为 cn、us、jp 这三个类别的 IPv6 地址
+  }
+}
+```
+
+### **dbipCountryMMDB**
+
+- **type**：（必须）输入格式的名称
+- **action**：（必须）操作类型，值为 `add`（添加 IP 地址）或 `remove`（移除 IP 地址）
+- **args**：（可选）
+  - **uri**：（可选）DB-IP country MMDB 格式文件路径，可为本地文件路径或远程 `http`、`https` 文件 URL。
+  - **wantedList**：（可选）指定需要的类别/文件。
+  - **onlyIPType**：（可选）只处理的 IP 地址类型，值为 `ipv4` 或 `ipv6`。
+
+```jsonc
+// 默认使用文件：
+// ./db-ip/dbip-country-lite.mmdb
+{
+  "type": "dbipCountryMMDB",
+  "action": "add"       // 添加 IP 地址
+}
+```
+
+```jsonc
+{
+  "type": "dbipCountryMMDB",
+  "action": "add",       // 添加 IP 地址
+  "args": {
+    "uri": "./db-ip/dbip-country-lite.mmdb"
+  }
+}
+```
+
+```jsonc
+{
+  "type": "dbipCountryMMDB",
+  "action": "add",                        // 添加 IP 地址
+  "args": {
+    "uri": "https://example.com/my.mmdb",
+    "wantedList": ["cn", "us", "jp"],    // 只需要名为 cn、us、jp 的类别
+    "onlyIPType": "ipv4"                 // 只添加 IPv4 地址
+  }
+}
+```
+
+```jsonc
+{
+  "type": "dbipCountryMMDB",
+  "action": "remove",                    // 添加 IP 地址
+  "args": {
+    "uri": "https://example.com/my.mmdb",
+    "wantedList": ["cn", "us", "jp"],    // 只移除名为 cn、us、jp 这三个类别的 IPv4 地址
+    "onlyIPType": "ipv4"                 // 只移除 IPv4 地址
+  }
+}
+```
+
+### **ipinfoCountryMMDB**
+
+- **type**：（必须）输入格式的名称
+- **action**：（必须）操作类型，值为 `add`（添加 IP 地址）或 `remove`（移除 IP 地址）
+- **args**：（可选）
+  - **uri**：（可选）IPInfo country MMDB 格式文件路径，可为本地文件路径或远程 `http`、`https` 文件 URL。
+  - **wantedList**：（可选）指定需要的类别/文件。
+  - **onlyIPType**：（可选）只处理的 IP 地址类型，值为 `ipv4` 或 `ipv6`。
+
+```jsonc
+// 默认使用文件：
+// ./ipinfo/country.mmdb
+{
+  "type": "ipinfoCountryMMDB",
+  "action": "add"       // 添加 IP 地址
+}
+```
+
+```jsonc
+{
+  "type": "ipinfoCountryMMDB",
+  "action": "add",       // 添加 IP 地址
+  "args": {
+    "uri": "./ipinfo/country.mmdb"
+  }
+}
+```
+
+```jsonc
+{
+  "type": "ipinfoCountryMMDB",
+  "action": "add",                        // 添加 IP 地址
+  "args": {
+    "uri": "https://example.com/my.mmdb",
+    "wantedList": ["cn", "us", "jp"],    // 只需要名为 cn、us、jp 的类别
+    "onlyIPType": "ipv4"                 // 只添加 IPv4 地址
+  }
+}
+```
+
+```jsonc
+{
+  "type": "ipinfoCountryMMDB",
+  "action": "remove",                    // 添加 IP 地址
+  "args": {
+    "uri": "https://example.com/my.mmdb",
+    "wantedList": ["cn", "us", "jp"],    // 只移除名为 cn、us、jp 这三个类别的 IPv4 地址
+    "onlyIPType": "ipv4"                 // 只移除 IPv4 地址
   }
 }
 ```
@@ -728,6 +836,7 @@
   - **outputDir**：（可选）输出目录
   - **outputExtension**：（可选）输出文件的扩展名
   - **wantedList**：（可选，数组）指定需要输出的类别
+  - **excludedList**：（可选，数组）指定不需要输出的类别
   - **onlyIPType**：（可选）输出的 IP 地址类型，值为 `ipv4` 或 `ipv6`
 
 ```jsonc
@@ -774,6 +883,18 @@
 }
 ```
 
+```jsonc
+{
+  "type": "clashRuleSet",
+  "action": "output",
+  "args": {
+    "outputDir": "./clash/ipcidr",     // 输出文件到目录 ./clash/ipcidr
+    "outputExtension": ".yaml",        // 输出文件的扩展名为 .yaml
+    "excludedList": ["cn", "us", "jp"] // 不输出名为 cn、us、jp 这三个类别的 IPv4 和 IPv6 地址
+  }
+}
+```
+
 ### **clashRuleSetClassical**
 
 - **type**：（必须）输入格式的名称
@@ -782,6 +903,7 @@
   - **outputDir**：（可选）输出目录
   - **outputExtension**：（可选）输出文件的扩展名
   - **wantedList**：（可选，数组）指定需要输出的类别
+  - **excludedList**：（可选，数组）指定不需要输出的类别
   - **onlyIPType**：（可选）输出的 IP 地址类型，值为 `ipv4` 或 `ipv6`
 
 ```jsonc
@@ -828,6 +950,248 @@
 }
 ```
 
+```jsonc
+{
+  "type": "clashRuleSetClassical",
+  "action": "output",
+  "args": {
+    "outputDir": "./clash/classical",   // 输出文件到目录 ./clash/classical
+    "outputExtension": ".yaml",         // 输出文件的扩展名为 .yaml
+    "excludedList": ["cn", "us", "jp"]  // 不输出名为 cn、us、jp 这三个类别的 IPv4 和 IPv6 地址
+  }
+}
+```
+
+### **dbipCountryMMDB**
+
+- **type**：（必须）输入格式的名称
+- **action**：（必须）操作类型，值必须为 `output`
+- **args**：（可选）
+  - **outputName**：（可选）输出的文件名
+  - **outputDir**：（可选）输出目录
+  - **onlyIPType**：（可选）输出的 IP 地址类型，值为 `ipv4` 或 `ipv6`
+  - **wantedList**：（可选，数组）指定需要输出的类别
+  - **excludedList**：（可选，数组）指定不需要输出的类别
+  - **overwriteList**：（可选，数组）指定最后写入的类别（原因见👇）
+  - **sourceMMDBURI**：（可选）指定用于补全本项目生成的 MMDB 格式文件所缺失的额外信息的 DB-IP 官方 country MMDB 格式文件路径，可为本地文件路径或远程 `http`、`https` 文件 URL（原因见👇）
+
+> 由于 DB-IP mmdb 文件格式的限制，当不同列表的 IP 或 CIDR 数据有交集或重复项时，后写入的列表的 IP 或 CIDR 数据会覆盖（overwrite）之前已写入的列表的数据。譬如，IP `1.1.1.1` 同属于列表 `AU` 和列表 `Cloudflare`。如果 `Cloudflare` 在 `AU` 之后写入，则 IP `1.1.1.1` 最终归属于列表 `Cloudflare`。
+>
+> 为了确保某些指定的列表、被修改的列表一定囊括属于它的所有 IP 或 CIDR 数据，可在 output 输出格式为 `dbipCountryMMDB` 的配置中增加选项 `overwriteList`，该选项中指定的列表会在最后逐一写入，列表中最后一项优先级最高。若已设置选项 `wantedList`，则无需设置 `overwriteList`。`wantedList` 中指定的列表会在最后逐一写入，列表中最后一项优先级最高。
+>
+> `wantedList`、`overwriteList`、`excludedList` 三者中，`excludedList` 优先级最高。即：若设置了选项 `excludedList`，最终不会输出存在于 `excludedList` 中的列表。
+
+> 由于本项目软件架构的限制，默认输出的 MMDB 格式文件只包含基本信息（`country.iso_code` 字段，即国家/地区两位英文字母代号），不包含其他额外信息（如 IP 或 CIDR 所属的国家/地区多语种名称、所属大洲及大洲多语种名称等）。为了跟官方提供的 MMDB 格式文件保持同样丰富的信息（字段），可通过配置选项 `sourceMMDBURI` 来指定 DB-IP 官方 country MMDB 格式文件路径，为本项目生成的 MMDB 格式文件补全缺失的额外信息。
+>
+> 只能补全国家/地区类别的额外信息。新增类别不属于国家/地区类别，不存在于 DB-IP 官方 country MMDB 格式文件中，无法补全。
+
+```jsonc
+// 默认输出目录 ./output/db-ip
+{
+  "type": "dbipCountryMMDB",
+  "action": "output"
+}
+```
+
+```jsonc
+{
+  "type": "dbipCountryMMDB",
+  "action": "output",
+  "args": {
+    "outputDir": "./output",                      // 输出文件到 output 目录
+    "outputName": "Country-only-cn-private.mmdb", // 输出文件名为 Country-only-cn-private.mmdb
+    "wantedList": ["cn", "private"]               // 只输出 cn、private 类别
+  }
+}
+```
+
+```jsonc
+{
+  "type": "dbipCountryMMDB",
+  "action": "output",
+  "args": {
+    "outputDir": "./output",                         // 输出文件到 output 目录
+    "outputName": "Country-without-cn-private.mmdb", // 输出文件名为 Country-without-cn-private.mmdb
+    "excludedList": ["cn", "private"]                // 不输出 cn、private 类别
+  }
+}
+```
+
+```jsonc
+{
+  "type": "dbipCountryMMDB",
+  "action": "output",
+  "args": {
+    "outputName": "Country.mmdb",     // 输出文件名为 Country.mmdb
+    "overwriteList": ["cn", "google"] // 确保 cn、google 类别最后写入，且 google 比 cn 后写入
+  }
+}
+```
+
+```jsonc
+{
+  "type": "dbipCountryMMDB",
+  "action": "output",
+  "args": {
+    "outputName": "Country.mmdb",      // 输出文件名为 Country.mmdb
+    "overwriteList": ["cn", "google"], // 确保 cn、google 类别最后写入，且 google 比 cn 后写入
+    "onlyIPType": "ipv4"               // 只输出 cn、private 类别的 IPv4 地址
+  }
+}
+```
+
+```jsonc
+{
+  "type": "dbipCountryMMDB",
+  "action": "output",
+  "args": {
+    "outputName": "Country.mmdb",                 // 输出文件名为 Country.mmdb
+    "excludedList": ["private"],                  // 最终不输出 private 类别
+    "wantedList": ["private" ,"au", "cloudflare"] // 只输出 au、cloudflare 类别，并确保 cloudflare 比 au 后写入。但由于 private 存在于 excludedList 中，最终不输出 private 类别
+  }
+}
+```
+
+```jsonc
+{
+  "type": "dbipCountryMMDB",
+  "action": "output",
+  "args": {
+    "outputName": "Country.mmdb",                // 输出文件名为 Country.mmdb
+    "excludedList": ["private"],                 // 最终不输出 private 类别
+    "overwriteList": ["private" ,"cn", "google"] // 确保 cn、google 类别最后写入，且 google 比 cn 后写入。但由于 private 存在于 excludedList 中，最终不输出 private 类别
+  }
+}
+```
+
+```jsonc
+{
+  "type": "dbipCountryMMDB",
+  "action": "output",
+  "args": {
+    "outputName": "Country.mmdb",                     // 输出文件名为 Country.mmdb
+    "excludedList": ["private"],                      // 最终不输出 private 类别
+    "overwriteList": ["private" ,"cn", "google"],     // 确保 cn、google 类别最后写入，且 google 比 cn 后写入。但由于 private 存在于 excludedList 中，最终不输出 private 类别
+    "sourceMMDBURI": "./db-ip/dbip-country-lite.mmdb" // 用于补全生成的 MMDB 格式文件额外信息的 DB-IP 官方 country MMDB 格式文件。由于 private、google 类别不属于国家/地区类别，无法补全额外信息。
+  }
+}
+```
+
+### **ipinfoCountryMMDB**
+
+- **type**：（必须）输入格式的名称
+- **action**：（必须）操作类型，值必须为 `output`
+- **args**：（可选）
+  - **outputName**：（可选）输出的文件名
+  - **outputDir**：（可选）输出目录
+  - **onlyIPType**：（可选）输出的 IP 地址类型，值为 `ipv4` 或 `ipv6`
+  - **wantedList**：（可选，数组）指定需要输出的类别
+  - **excludedList**：（可选，数组）指定不需要输出的类别
+  - **overwriteList**：（可选，数组）指定最后写入的类别（原因见👇）
+  - **sourceMMDBURI**：（可选）指定用于补全本项目生成的 MMDB 格式文件所缺失的额外信息的 IPInfo 官方 country MMDB 格式文件路径，可为本地文件路径或远程 `http`、`https` 文件 URL（原因见👇）
+
+> 由于 IPInfo mmdb 文件格式的限制，当不同列表的 IP 或 CIDR 数据有交集或重复项时，后写入的列表的 IP 或 CIDR 数据会覆盖（overwrite）之前已写入的列表的数据。譬如，IP `1.1.1.1` 同属于列表 `AU` 和列表 `Cloudflare`。如果 `Cloudflare` 在 `AU` 之后写入，则 IP `1.1.1.1` 最终归属于列表 `Cloudflare`。
+>
+> 为了确保某些指定的列表、被修改的列表一定囊括属于它的所有 IP 或 CIDR 数据，可在 output 输出格式为 `ipinfoCountryMMDB` 的配置中增加选项 `overwriteList`，该选项中指定的列表会在最后逐一写入，列表中最后一项优先级最高。若已设置选项 `wantedList`，则无需设置 `overwriteList`。`wantedList` 中指定的列表会在最后逐一写入，列表中最后一项优先级最高。
+>
+> `wantedList`、`overwriteList`、`excludedList` 三者中，`excludedList` 优先级最高。即：若设置了选项 `excludedList`，最终不会输出存在于 `excludedList` 中的列表。
+
+> 由于本项目软件架构的限制，默认输出的 MMDB 格式文件只包含基本信息（`country` 字段，即国家/地区两位英文字母代号），不包含其他额外信息（如 IP 或 CIDR 所属的国家/地区多语种名称、所属大洲及大洲多语种名称等）。为了跟官方提供的 MMDB 格式文件保持同样丰富的信息（字段），可通过配置选项 `sourceMMDBURI` 来指定 IPInfo 官方 country MMDB 格式文件路径，为本项目生成的 MMDB 格式文件补全缺失的额外信息。
+>
+> 只能补全国家/地区类别的额外信息。新增类别不属于国家/地区类别，不存在于 IPInfo 官方 country MMDB 格式文件中，无法补全。
+
+```jsonc
+// 默认输出目录 ./output/ipinfo
+{
+  "type": "ipinfoCountryMMDB",
+  "action": "output"
+}
+```
+
+```jsonc
+{
+  "type": "ipinfoCountryMMDB",
+  "action": "output",
+  "args": {
+    "outputDir": "./output",                      // 输出文件到 output 目录
+    "outputName": "Country-only-cn-private.mmdb", // 输出文件名为 Country-only-cn-private.mmdb
+    "wantedList": ["cn", "private"]               // 只输出 cn、private 类别
+  }
+}
+```
+
+```jsonc
+{
+  "type": "ipinfoCountryMMDB",
+  "action": "output",
+  "args": {
+    "outputDir": "./output",                         // 输出文件到 output 目录
+    "outputName": "Country-without-cn-private.mmdb", // 输出文件名为 Country-without-cn-private.mmdb
+    "excludedList": ["cn", "private"]                // 不输出 cn、private 类别
+  }
+}
+```
+
+```jsonc
+{
+  "type": "ipinfoCountryMMDB",
+  "action": "output",
+  "args": {
+    "outputName": "Country.mmdb",     // 输出文件名为 Country.mmdb
+    "overwriteList": ["cn", "google"] // 确保 cn、google 类别最后写入，且 google 比 cn 后写入
+  }
+}
+```
+
+```jsonc
+{
+  "type": "ipinfoCountryMMDB",
+  "action": "output",
+  "args": {
+    "outputName": "Country.mmdb",      // 输出文件名为 Country.mmdb
+    "overwriteList": ["cn", "google"], // 确保 cn、google 类别最后写入，且 google 比 cn 后写入
+    "onlyIPType": "ipv4"               // 只输出 cn、private 类别的 IPv4 地址
+  }
+}
+```
+
+```jsonc
+{
+  "type": "ipinfoCountryMMDB",
+  "action": "output",
+  "args": {
+    "outputName": "Country.mmdb",                 // 输出文件名为 Country.mmdb
+    "excludedList": ["private"],                  // 最终不输出 private 类别
+    "wantedList": ["private" ,"au", "cloudflare"] // 只输出 au、cloudflare 类别，并确保 cloudflare 比 au 后写入。但由于 private 存在于 excludedList 中，最终不输出 private 类别
+  }
+}
+```
+
+```jsonc
+{
+  "type": "ipinfoCountryMMDB",
+  "action": "output",
+  "args": {
+    "outputName": "Country.mmdb",                // 输出文件名为 Country.mmdb
+    "excludedList": ["private"],                 // 最终不输出 private 类别
+    "overwriteList": ["private" ,"cn", "google"] // 确保 cn、google 类别最后写入，且 google 比 cn 后写入。但由于 private 存在于 excludedList 中，最终不输出 private 类别
+  }
+}
+```
+
+```jsonc
+{
+  "type": "ipinfoCountryMMDB",
+  "action": "output",
+  "args": {
+    "outputName": "Country.mmdb",                 // 输出文件名为 Country.mmdb
+    "excludedList": ["private"],                  // 最终不输出 private 类别
+    "overwriteList": ["private" ,"cn", "google"], // 确保 cn、google 类别最后写入，且 google 比 cn 后写入。但由于 private 存在于 excludedList 中，最终不输出 private 类别
+    "sourceMMDBURI": "./ipinfo/country.mmdb"      // 用于补全生成的 MMDB 格式文件额外信息的 IPInfo 官方 country MMDB 格式文件。由于 private、google 类别不属于国家/地区类别，无法补全额外信息。
+  }
+}
+```
+
 ### **lookup**
 
 - **type**：（必须）输入格式的名称
@@ -868,11 +1232,19 @@
   - **outputDir**：（可选）输出目录
   - **onlyIPType**：（可选）输出的 IP 地址类型，值为 `ipv4` 或 `ipv6`
   - **wantedList**：（可选，数组）指定需要输出的类别
+  - **excludedList**：（可选，数组）指定不需要输出的类别
   - **overwriteList**：（可选，数组）指定最后写入的类别（原因见👇）
+  - **sourceMMDBURI**：（可选）指定用于补全本项目生成的 MMDB 格式文件所缺失的额外信息的 Maxmind 官方 country MMDB 格式文件路径，可为本地文件路径或远程 `http`、`https` 文件 URL（原因见👇）
 
-> 由于 MaxMind mmdb 文件格式的限制，当不同列表的 IP 或 CIDR 数据有交集或重复项时，后写入的列表的 IP 或 CIDR 数据会覆盖（overwrite）之前已写入的列表的数据。譬如，IP 1.1.1.1 同属于列表 `AU` 和列表 `Cloudflare`。如果 `Cloudflare` 在 `AU` 之后写入，则 IP `1.1.1.1` 归属于列表 `Cloudflare`。
+> 由于 MaxMind mmdb 文件格式的限制，当不同列表的 IP 或 CIDR 数据有交集或重复项时，后写入的列表的 IP 或 CIDR 数据会覆盖（overwrite）之前已写入的列表的数据。譬如，IP `1.1.1.1` 同属于列表 `AU` 和列表 `Cloudflare`。如果 `Cloudflare` 在 `AU` 之后写入，则 IP `1.1.1.1` 最终归属于列表 `Cloudflare`。
 >
 > 为了确保某些指定的列表、被修改的列表一定囊括属于它的所有 IP 或 CIDR 数据，可在 output 输出格式为 `maxmindMMDB` 的配置中增加选项 `overwriteList`，该选项中指定的列表会在最后逐一写入，列表中最后一项优先级最高。若已设置选项 `wantedList`，则无需设置 `overwriteList`。`wantedList` 中指定的列表会在最后逐一写入，列表中最后一项优先级最高。
+>
+> `wantedList`、`overwriteList`、`excludedList` 三者中，`excludedList` 优先级最高。即：若设置了选项 `excludedList`，最终不会输出存在于 `excludedList` 中的列表。
+
+> 由于本项目软件架构的限制，默认输出的 MMDB 格式文件只包含基本信息（`country.iso_code` 字段，即国家/地区两位英文字母代号），不包含其他额外信息（如 IP 或 CIDR 所属的国家/地区多语种名称、所属大洲及大洲多语种名称等）。为了跟官方提供的 MMDB 格式文件保持同样丰富的信息（字段），可通过配置选项 `sourceMMDBURI` 来指定 Maxmind 官方 country MMDB 格式文件路径，为本项目生成的 MMDB 格式文件补全缺失的额外信息。
+>
+> 只能补全国家/地区类别的额外信息。新增类别不属于国家/地区类别，不存在于 Maxmind 官方 country MMDB 格式文件中，无法补全。
 
 ```jsonc
 // 默认输出目录 ./output/maxmind
@@ -899,8 +1271,20 @@
   "type": "maxmindMMDB",
   "action": "output",
   "args": {
+    "outputDir": "./output",                         // 输出文件到 output 目录
+    "outputName": "Country-without-cn-private.mmdb", // 输出文件名为 Country-without-cn-private.mmdb
+    "excludedList": ["cn", "private"]                // 不输出 cn、private 类别
+  }
+}
+```
+
+```jsonc
+{
+  "type": "maxmindMMDB",
+  "action": "output",
+  "args": {
     "outputName": "Country.mmdb",     // 输出文件名为 Country.mmdb
-    "overwriteList": ["cn", "google"] // 确保 cn、google 类别后写入，且 google 最后写入
+    "overwriteList": ["cn", "google"] // 确保 cn、google 类别最后写入，且 google 比 cn 后写入
   }
 }
 ```
@@ -911,8 +1295,45 @@
   "action": "output",
   "args": {
     "outputName": "Country.mmdb",      // 输出文件名为 Country.mmdb
-    "overwriteList": ["cn", "google"], // 确保 cn、google 类别后写入，且 google 最后写入
+    "overwriteList": ["cn", "google"], // 确保 cn、google 类别最后写入，且 google 比 cn 后写入
     "onlyIPType": "ipv4"               // 只输出 cn、private 类别的 IPv4 地址
+  }
+}
+```
+
+```jsonc
+{
+  "type": "maxmindMMDB",
+  "action": "output",
+  "args": {
+    "outputName": "Country.mmdb",                 // 输出文件名为 Country.mmdb
+    "excludedList": ["private"],                  // 最终不输出 private 类别
+    "wantedList": ["private" ,"au", "cloudflare"] // 只输出 au、cloudflare 类别，并确保 cloudflare 比 au 后写入。但由于 private 存在于 excludedList 中，最终不输出 private 类别
+  }
+}
+```
+
+```jsonc
+{
+  "type": "maxmindMMDB",
+  "action": "output",
+  "args": {
+    "outputName": "Country.mmdb",                // 输出文件名为 Country.mmdb
+    "excludedList": ["private"],                 // 最终不输出 private 类别
+    "overwriteList": ["private" ,"cn", "google"] // 确保 cn、google 类别最后写入，且 google 比 cn 后写入。但由于 private 存在于 excludedList 中，最终不输出 private 类别
+  }
+}
+```
+
+```jsonc
+{
+  "type": "maxmindMMDB",
+  "action": "output",
+  "args": {
+    "outputName": "Country.mmdb",                       // 输出文件名为 Country.mmdb
+    "excludedList": ["private"],                        // 最终不输出 private 类别
+    "overwriteList": ["private" ,"cn", "google"],       // 确保 cn、google 类别最后写入，且 google 比 cn 后写入。但由于 private 存在于 excludedList 中，最终不输出 private 类别
+    "sourceMMDBURI": "./geolite2/GeoLite2-Country.mmdb" // 用于补全生成的 MMDB 格式文件额外信息的 Maxmind 官方 country MMDB 格式文件。由于 private、google 类别不属于国家/地区类别，无法补全额外信息。
   }
 }
 ```
@@ -924,6 +1345,7 @@
 - **args**：（可选）
   - **outputDir**：（可选）输出目录
   - **wantedList**：（可选，数组）指定需要输出的类别
+  - **excludedList**：（可选，数组）指定不需要输出的类别
   - **onlyIPType**：（可选）输出的 IP 地址类型，值为 `ipv4` 或 `ipv6`
 
 ```jsonc
@@ -950,6 +1372,17 @@
   "type": "mihomoMRS",
   "action": "output",
   "args": {
+    "outputDir": "./output",           // 输出文件到 output 目录
+    "excludedList": ["cn", "private"]  // 不输出 cn、private 类别
+  }
+}
+```
+
+```jsonc
+{
+  "type": "mihomoMRS",
+  "action": "output",
+  "args": {
     "onlyIPType": "ipv4" // 只输出 IPv4 地址
   }
 }
@@ -962,6 +1395,7 @@
 - **args**：（可选）
   - **outputDir**：（可选）输出目录
   - **wantedList**：（可选，数组）指定需要输出的类别
+  - **excludedList**：（可选，数组）指定不需要输出的类别
   - **onlyIPType**：（可选）输出的 IP 地址类型，值为 `ipv4` 或 `ipv6`
 
 ```jsonc
@@ -988,6 +1422,17 @@
   "type": "singboxSRS",
   "action": "output",
   "args": {
+    "outputDir": "./output",          // 输出文件到 output 目录
+    "excludedList": ["cn", "private"] // 不输出 cn、private 类别
+  }
+}
+```
+
+```jsonc
+{
+  "type": "singboxSRS",
+  "action": "output",
+  "args": {
     "onlyIPType": "ipv4" // 只输出 IPv4 地址
   }
 }
@@ -999,6 +1444,7 @@
 - **action**：（必须）操作类型，值必须为 `output`
 - **args**：（可选）
   - **wantedList**：（可选，数组）指定需要输出的类别
+  - **excludedList**：（可选，数组）指定不需要输出的类别
   - **onlyIPType**：（可选）输出的 IP 地址类型，值为 `ipv4` 或 `ipv6`
 
 ```jsonc
@@ -1023,6 +1469,16 @@
   "type": "stdout",
   "action": "output",
   "args": {
+    "excludedList": ["cn", "private"] // 不输出 cn、private 类别到 standard output
+  }
+}
+```
+
+```jsonc
+{
+  "type": "stdout",
+  "action": "output",
+  "args": {
     "onlyIPType": "ipv4" // 只输出 IPv4 地址到 standard output
   }
 }
@@ -1036,6 +1492,7 @@
   - **outputDir**：（可选）输出目录
   - **outputExtension**：（可选）输出的文件的扩展名
   - **wantedList**：（可选，数组）指定需要输出的类别
+  - **excludedList**：（可选，数组）指定不需要输出的类别
   - **onlyIPType**：（可选）输出的 IP 地址类型，值为 `ipv4` 或 `ipv6`
 
 ```jsonc
@@ -1074,6 +1531,18 @@
   "type": "surgeRuleSet",
   "action": "output",
   "args": {
+    "outputDir": "./surge",            // 输出文件到目录 ./surge
+    "outputExtension": ".conf",        // 输出文件的扩展名为 .conf
+    "excludedList": ["cn", "us", "jp"] // 不输出名为 cn、us、jp 这三个类别的 IPv4 和 IPv6 地址
+  }
+}
+```
+
+```jsonc
+{
+  "type": "surgeRuleSet",
+  "action": "output",
+  "args": {
     "outputDir": "./surge",           // 输出文件到目录 ./surge
     "outputExtension": ".conf",       // 输出文件的扩展名为 .conf
     "wantedList": ["cn", "us", "jp"], // 只输出名为 cn、us、jp 这三个类别的 IPv4 地址
@@ -1090,6 +1559,7 @@
   - **outputDir**：（可选）输出目录
   - **outputExtension**：（可选）输出的文件的扩展名
   - **wantedList**：（可选，数组）指定需要输出的类别
+  - **excludedList**：（可选，数组）指定不需要输出的类别
   - **onlyIPType**：（可选）输出的 IP 地址类型，值为 `ipv4` 或 `ipv6`
   - **addPrefixInLine**：（可选）给输出的每一行添加的字符串前缀
   - **addSuffixInLine**：（可选）给输出的每一行添加的字符串后缀
@@ -1139,6 +1609,19 @@
   "type": "text",
   "action": "output",
   "args": {
+    "outputDir": "./text",              // 输出文件到目录 ./text
+    "outputExtension": ".conf",         // 输出文件的扩展名为 .conf
+    "excludedList": ["cn", "us", "jp"], // 不输出名为 cn、us、jp 这三个类别的 IPv4 和 IPv6 地址
+    "addPrefixInLine": "HOST,"
+  }
+}
+```
+
+```jsonc
+{
+  "type": "text",
+  "action": "output",
+  "args": {
     "outputDir": "./text",            // 输出文件到目录 ./text
     "outputExtension": ".conf",       // 输出文件的扩展名为 .conf
     "wantedList": ["cn", "us", "jp"], // 只输出名为 cn、us、jp 这三个类别的 IPv4 地址
@@ -1156,6 +1639,7 @@
   - **outputName**：（可选）输出的文件名
   - **outputDir**：（可选）输出目录
   - **wantedList**：（可选，数组）指定需要输出的类别
+  - **excludedList**：（可选，数组）指定不需要输出的类别
   - **onlyIPType**：（可选）输出的 IP 地址类型，值为 `ipv4` 或 `ipv6`
   - **oneFilePerList**：（可选）每个类别输出为一个单独的文件，值为 `true` 或 `false`（默认值）
 
@@ -1185,6 +1669,18 @@
     "outputDir": "./output",                   // 输出文件到 output 目录
     "outputName": "geoip-only-cn-private.dat", // 输出文件名为 geoip-only-cn-private.dat
     "wantedList": ["cn", "private"]            // 只输出 cn、private 类别
+  }
+}
+```
+
+```jsonc
+{
+  "type": "v2rayGeoIPDat",
+  "action": "output",
+  "args": {
+    "outputDir": "./output",                      // 输出文件到 output 目录
+    "outputName": "geoip-without-cn-private.dat", // 输出文件名为 geoip-without-cn-private.dat
+    "excludedList": ["cn", "private"]             // 不输出 cn、private 类别
   }
 }
 ```

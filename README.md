@@ -21,6 +21,7 @@ This project releases various formats of GeoIP files automatically every Thursda
   - `geoip:netflix`（`GEOIP,NETFLIX`）
   - `geoip:telegram`（`GEOIP,TELEGRAM`）
   - `geoip:twitter`（`GEOIP,TWITTER`）
+  - `geoip:tor`（`GEOIP,TOR`）
 
 ## 下载地址与使用方法
 
@@ -155,7 +156,7 @@ MaxMind 官方版**国家/地区**类型 mmdb 文件：
 
 > 适用于 [Clash](https://github.com/Dreamacro/clash)、[mihomo](https://github.com/MetaCubeX/mihomo/tree/Meta)、[Shadowrocket](https://apps.apple.com/us/app/id932747118)、[Quantumult X](https://apps.apple.com/us/app/id1443988620)、[Surge](https://nssurge.com)、[Leaf](https://github.com/eycorsican/leaf)。
 
-> 适用于 [Nginx](https://nginx.org)，需要配合 [ngx_http_geoip2_module](https://github.com/leev/ngx_http_geoip2_module) 模块使用。只保留了 `country` 下的 `iso_code`（两位英文字母表示的国家/地区代码）字段。
+> 适用于 [Nginx](https://nginx.org)，需要配合 [ngx_http_geoip2_module](https://github.com/leev/ngx_http_geoip2_module) 模块使用。
 
 - **GeoLite2-Country.mmdb**：
   - [https://raw.githubusercontent.com/Loyalsoldier/geoip/release/GeoLite2-Country.mmdb](https://raw.githubusercontent.com/Loyalsoldier/geoip/release/GeoLite2-Country.mmdb)
@@ -179,9 +180,17 @@ MaxMind 官方版 **ASN** 类型 mmdb 文件：
 
 > 适用于 [Clash](https://github.com/Dreamacro/clash)、[mihomo](https://github.com/MetaCubeX/mihomo/tree/Meta)、[Shadowrocket](https://apps.apple.com/us/app/id932747118)、[Quantumult X](https://apps.apple.com/us/app/id1443988620)、[Surge](https://nssurge.com)、[Leaf](https://github.com/eycorsican/leaf)。
 
-> 适用于 [Nginx](https://nginx.org)，需要配合 [ngx_http_geoip2_module](https://github.com/leev/ngx_http_geoip2_module) 模块使用。只保留了 `country` 下的 `iso_code`（两位英文字母表示的国家/地区代码）字段。
+> 适用于 [Nginx](https://nginx.org)，需要配合 [ngx_http_geoip2_module](https://github.com/leev/ngx_http_geoip2_module) 模块使用。
 
-- **Country.mmdb**：
+> **国家/地区**类别保留了 `Continent` 和 `Country` 里的所有字段。**新增类别**和 **geoip:private** 类别只保留了 `Country` 里的 `iso_code`（两位英文字母表示的国家/地区代号）字段。关于 Maxmind 官方 country MMDB 格式文件完整字段，请[查看代码](https://github.com/oschwald/geoip2-golang/blob/576a46d19bb59f32d0215cb43285b8928891b6bc/reader.go#L139-L171)。
+
+- **Country-without-asn.mmdb**（传统版 GeoIP，只包含国家/地区类别，不包含上述新增类别。建议优先使用）：
+  - [https://raw.githubusercontent.com/Loyalsoldier/geoip/release/Country-without-asn.mmdb](https://raw.githubusercontent.com/Loyalsoldier/geoip/release/Country-without-asn.mmdb)
+  - [https://cdn.jsdelivr.net/gh/Loyalsoldier/geoip@release/Country-without-asn.mmdb](https://cdn.jsdelivr.net/gh/Loyalsoldier/geoip@release/Country-without-asn.mmdb)
+- **Country-without-asn.mmdb.sha256sum**：
+  - [https://raw.githubusercontent.com/Loyalsoldier/geoip/release/Country-without-asn.mmdb.sha256sum](https://raw.githubusercontent.com/Loyalsoldier/geoip/release/Country-without-asn.mmdb.sha256sum)
+  - [https://cdn.jsdelivr.net/gh/Loyalsoldier/geoip@release/Country-without-asn.mmdb.sha256sum](https://cdn.jsdelivr.net/gh/Loyalsoldier/geoip@release/Country-without-asn.mmdb.sha256sum)
+- **Country.mmdb**（增强版 GeoIP，包含国家/地区类别，以及上述新增类别。但由于 MaxMind mmdb 格式限制，部分国家/地区类别的 IP 地址数据不如上述 **Country-without-asn.mmdb** 准确）：
   - [https://raw.githubusercontent.com/Loyalsoldier/geoip/release/Country.mmdb](https://raw.githubusercontent.com/Loyalsoldier/geoip/release/Country.mmdb)
   - [https://cdn.jsdelivr.net/gh/Loyalsoldier/geoip@release/Country.mmdb](https://cdn.jsdelivr.net/gh/Loyalsoldier/geoip@release/Country.mmdb)
 - **Country.mmdb.sha256sum**：
@@ -455,6 +464,8 @@ These two concepts are notable: `input` and `output`. The `input` is the data so
 - **maxmindMMDB**：MaxMind GeoLite2 country mmdb 数据格式（`GeoLite2-Country.mmdb`）
 - **maxmindGeoLite2ASNCSV**：MaxMind GeoLite2 ASN CSV 数据格式（`GeoLite2-ASN-CSV.zip`）
 - **maxmindGeoLite2CountryCSV**：MaxMind GeoLite2 country CSV 数据格式（`GeoLite2-Country-CSV.zip`）
+- **dbipCountryMMDB**：DB-IP country mmdb 数据格式（`dbip-country-lite.mmdb`）
+- **ipinfoCountryMMDB**：IPInfo country mmdb 数据格式（`country.mmdb`）
 - **mihomoMRS**：mihomo MRS 数据格式（`geoip-cn.mrs`）
 - **singboxSRS**：sing-box SRS 数据格式（`geoip-cn.srs`）
 - **clashRuleSetClassical**：[classical 类型的 Clash RuleSet](https://github.com/Dreamacro/clash/wiki/premium-core-features#classical)
@@ -467,7 +478,9 @@ These two concepts are notable: `input` and `output`. The `input` is the data so
 - **stdout**：将纯文本 CIDR 输出到 standard output（例如：`1.0.0.0/24`）
 - **lookup**：从指定的列表中查找指定的 IP 或 CIDR
 - **v2rayGeoIPDat**：V2Ray GeoIP dat 数据格式（`geoip.dat`）
-- **maxmindMMDB**：MaxMind mmdb 数据格式（`GeoLite2-Country.mmdb`）
+- **maxmindMMDB**：MaxMind GeoLite2 country mmdb 数据格式（`GeoLite2-Country.mmdb`）
+- **dbipCountryMMDB**：DB-IP country mmdb 数据格式（`dbip-country-lite.mmdb`）
+- **ipinfoCountryMMDB**：IPInfo country mmdb 数据格式（`country.mmdb`）
 - **mihomoMRS**：mihomo MRS 数据格式（`geoip-cn.mrs`）
 - **singboxSRS**：sing-box SRS 数据格式（`geoip-cn.srs`）
 - **clashRuleSetClassical**：[classical 类型的 Clash RuleSet](https://github.com/Dreamacro/clash/wiki/premium-core-features#classical)
@@ -476,9 +489,9 @@ These two concepts are notable: `input` and `output`. The `input` is the data so
 
 ### 注意事项
 
-由于 MaxMind mmdb 文件格式的限制，当不同列表的 IP 或 CIDR 数据有交集或重复项时，后写入的列表的 IP 或 CIDR 数据会覆盖（overwrite）之前已写入的列表的数据。譬如，IP `1.1.1.1` 同属于列表 `AU` 和列表 `Cloudflare`。如果 `Cloudflare` 在 `AU` 之后写入，则 IP `1.1.1.1` 归属于列表 `Cloudflare`。
+由于 MaxMind、DB-IP、IPInfo 的 mmdb 文件格式的限制，当不同列表的 IP 或 CIDR 数据有交集或重复项时，后写入的列表的 IP 或 CIDR 数据会覆盖（overwrite）之前已写入的列表的数据。譬如，IP `1.1.1.1` 同属于列表 `AU` 和列表 `Cloudflare`。如果 `Cloudflare` 在 `AU` 之后写入，则 IP `1.1.1.1` 归属于列表 `Cloudflare`。
 
-为了确保某些指定的列表、被修改的列表一定囊括属于它的所有 IP 或 CIDR 数据，可在 `output` 输出格式为 `maxmindMMDB` 的配置中增加选项 `overwriteList`，该选项中指定的列表会在最后逐一写入，列表中最后一项优先级最高。若已设置选项 `wantedList`，则无需设置 `overwriteList`。`wantedList` 中指定的列表会在最后逐一写入，列表中最后一项优先级最高。
+为了确保某些指定的列表、被修改的列表一定囊括属于它的所有 IP 或 CIDR 数据，可在 `output` 相应输出格式的配置中增加选项 `overwriteList`，该选项中指定的列表会在最后逐一写入，列表中最后一项优先级最高。若已设置选项 `wantedList`，则无需设置 `overwriteList`。`wantedList` 中指定的列表会在最后逐一写入，列表中最后一项优先级最高。
 
 ## CLI 功能展示
 
@@ -521,6 +534,8 @@ All available input formats:
   - clashRuleSet (Convert ipcidr type of Clash RuleSet to other formats)
   - clashRuleSetClassical (Convert classical type of Clash RuleSet to other formats (just processing IP & CIDR lines))
   - cutter (Remove data from previous steps)
+  - dbipCountryMMDB (Convert DB-IP country mmdb database to other formats)
+  - ipinfoCountryMMDB (Convert IPInfo country mmdb database to other formats)
   - json (Convert JSON data to other formats)
   - maxmindGeoLite2ASNCSV (Convert MaxMind GeoLite2 ASN CSV data to other formats)
   - maxmindGeoLite2CountryCSV (Convert MaxMind GeoLite2 country CSV data to other formats)
@@ -537,6 +552,8 @@ All available input formats:
 All available output formats:
   - clashRuleSet (Convert data to ipcidr type of Clash RuleSet)
   - clashRuleSetClassical (Convert data to classical type of Clash RuleSet)
+  - dbipCountryMMDB (Convert data to DB-IP country mmdb database format)
+  - ipinfoCountryMMDB (Convert data to IPInfo country mmdb database format)
   - lookup (Lookup specified IP or CIDR from various formats of data)
   - maxmindMMDB (Convert data to MaxMind mmdb database format)
   - mihomoMRS (Convert data to mihomo MRS format)
@@ -596,60 +613,186 @@ $ ./geoip convert -c config.json
 
 ### 查找 IP 或 CIDR 所在类别（`lookup`）
 
+可能的返回结果：
+
+- 查询的字符串不是有效的 IP 或 CIDR，返回 `false`
+- 查询的 IP 或 CIDR 不存在于任何一个类别中，返回 `false`
+- 查询的 IP 或 CIDR 存在于某种格式文件的单个类别中：
+  - 若该格式文件只包含一个类别，返回 `true`
+  - 若该格式文件包含多个类别，返回匹配的类别名称
+- 查询的 IP 或 CIDR 存在于多个类别中，返回以英文逗号分隔的类别名称，如 `au,cloudflare`
+
 ```bash
-# lookup one IP from local file
-$ ./geoip lookup -f text -u ./cn.txt -n cn 1.0.1.1
+# ================= One-time Mode ================= #
+
+# 从 text 格式的本地文件（只包含一个类别）中查找某个 IP 地址
+# lookup IP from local file (with only one list) in text format
+$ ./geoip lookup -f text -u ./cn.txt 1.0.1.1
+true
+
+
+# 从 text 格式的本地文件（只包含一个类别）中查找某个 IP 地址
+# lookup IP from local file (with only one list) in text format
+$ ./geoip lookup -f text -u ./cn.txt 2.2.2.2
+false
+
+
+# 从 text 格式的本地文件（只包含一个类别）中查找某个 CIDR
+# lookup CIDR from local file (with only one list) in text format
+$ ./geoip lookup -f text -u ./cn.txt 1.0.1.1/24
+true
+
+
+# 从 text 格式的本地文件（只包含一个类别）中查找某个 CIDR
+# lookup CIDR from local file (with only one list) in text format
+$ ./geoip lookup -f text -u ./cn.txt 1.0.1.1/23
+false
+
+
+# 从 text 格式的远程 URL（只包含一个类别）中查找某个 IP 地址
+# lookup IP from remote URL (with only one list) in text format
+$ ./geoip lookup -f text -u https://example.com/cn.txt 1.0.1.1
+true
+
+
+# 从 v2rayGeoIPDat 格式的本地文件（只包含一个类别）中查找某个 IP 地址
+# lookup IP from local file (with only one list) in v2rayGeoIPDat format
+$ ./geoip lookup -f v2rayGeoIPDat -u ./cn.dat 1.0.1.1
+true
+
+
+# 从 v2rayGeoIPDat 格式的本地文件（包含多个类别）中查找某个 IP 地址
+# lookup IP from local file (with multiple lists) in v2rayGeoIPDat format
+$ ./geoip lookup -f v2rayGeoIPDat -u ./geoip.dat 1.0.1.1
 cn
 
 
-# lookup one CIDR from local file
-$ ./geoip lookup -f text -u ./cn.txt -n cn 1.0.1.1/24
-cn
+# 从 v2rayGeoIPDat 格式的本地文件（包含多个类别）中查找某个 IP 地址
+# lookup IP from local file (with multiple lists) in v2rayGeoIPDat format
+$ ./geoip lookup -f v2rayGeoIPDat -u ./geoip.dat 1.0.0.1
+au,cloudflare
 
 
-# lookup IP or CIDR in REPL mode from local file
-$ ./geoip lookup -f text -u ./cn.txt -n cn
-Enter IP or CIDR (type `exit` to quit):
+# 从 v2rayGeoIPDat 格式的远程 URL（包含多个类别）中查找某个 CIDR
+# lookup CIDR from remote URL (with multiple lists) in v2rayGeoIPDat format
+$ ./geoip lookup -f v2rayGeoIPDat -u https://example.com/geoip.dat 1.0.0.1/24
+au,cloudflare
+
+
+
+
+# ================= REPL Mode ================= #
+
+# 从 text 格式的本地文件（只包含一个类别）中查找某个 IP 地址或 CIDR
+# lookup IP or CIDR from local file (with only one list) in text format
+$ ./geoip lookup -f text -u ./cn.txt
+Enter IP or CIDR (type "exit" to quit):
+>> 1.0.1.1
+true
+
+>> 1.0.1.1/24
+true
+
+>> 1.0.1.1/23
+false
+
+>> 2.2.2.2
+false
+
+>> 2.2.2.2/24
+false
+
+>> 300.300.300.300
+false
+
+>> 300.300.300.300/24
+false
+
+>> exit
+
+
+# 从 text 格式的远程 URL（只包含一个类别）中查找某个 IP 地址或 CIDR
+# lookup IP or CIDR from remote URL (with only one list) in text format
+$ ./geoip lookup -f text -u https://example.com/cn.txt
+Enter IP or CIDR (type "exit" to quit):
+>> 1.0.1.1
+true
+
+>> 1.0.1.1/24
+true
+
+>> 1.0.1.1/23
+false
+
+>> 2.2.2.2
+false
+
+>> 2.2.2.2/24
+false
+
+>> 300.300.300.300
+false
+
+>> 300.300.300.300/24
+false
+
+>> exit
+
+
+# 从 v2rayGeoIPDat 格式的本地文件（只包含一个类别）中查找某个 IP 地址或 CIDR
+# lookup IP or CIDR from local file (with only one list) in v2rayGeoIPDat format
+$ ./geoip lookup -f v2rayGeoIPDat -u ./cn.dat
+Enter IP or CIDR (type "exit" to quit):
+>> 1.0.1.1
+true
+
+>> 1.0.1.1/24
+true
+
+>> 1.0.1.1/23
+false
+
+>> 2.2.2.2
+false
+
+>> 2.2.2.2/24
+false
+
+>> 300.300.300.300
+false
+
+>> 300.300.300.300/24
+false
+
+>> exit
+
+
+# 从 v2rayGeoIPDat 格式的远程 URL（包含多个类别）中查找某个 IP 地址或 CIDR
+# lookup IP or CIDR from remote URL (with multiple list) in v2rayGeoIPDat format
+$ ./geoip lookup -f v2rayGeoIPDat -u https://example.com/geoip.dat
+Enter IP or CIDR (type "exit" to quit):
 >> 1.0.1.1
 cn
+
 >> 1.0.1.1/24
 cn
 
+>> 1.0.1.1/23
+false
 
-# lookup IP or CIDR in REPL mode from remote file
-$ ./geoip lookup -f text -u https://example.com/cn.txt -n cn
-Enter IP or CIDR (type `exit` to quit):
->> 1.0.1.1
-cn
->> 1.0.1.1/24
-cn
+>> 1.0.0.1
+au,cloudflare
 
+>> 1.0.0.1/24
+au,cloudflare
 
-# lookup IP or CIDR in REPL mode from local directory, got two lists joined with comma
-$ ./geoip lookup -f text -d ./path/to/your/directory/
-Enter IP or CIDR (type `exit` to quit):
->> 1.0.1.1
-cn,my-custom-list
->> 1.0.1.1/24
-cn,my-custom-list
+>> 300.300.300.300
+false
 
+>> 300.300.300.300/24
+false
 
-# lookup IP or CIDR in REPL mode from specified lists in local directory
-$ ./geoip lookup -f text -d ./path/to/your/directory/ -l cn,us,jp
-Enter IP or CIDR (type `exit` to quit):
->> 1.0.1.1
-cn
->> 1.0.1.1/24
-cn
-
-
-# lookup IP or CIDR in REPL mode with another format from specified lists in remote file
-$ ./geoip lookup -f v2rayGeoIPDat -u https://example.com/geoip.dat -l cn,us,jp
-Enter IP or CIDR (type `exit` to quit):
->> 1.0.1.1
-cn
->> 1.0.1.1/24
-cn
+>> exit
 ```
 
 ## 使用本项目的项目
